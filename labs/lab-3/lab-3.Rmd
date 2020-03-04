@@ -1,7 +1,9 @@
 ---
 title: "Lab 3: Univariate Regression (II) & GLM"
 output: 
-  html_document: 
+  html_document:
+    includes:
+      in_header: header.html 
     fig_caption: yes
     theme: cosmo
     toc: yes
@@ -17,6 +19,12 @@ knitr::opts_chunk$set(echo = TRUE, rows.print = 10)
 options(scipen = 999)
 ```
 
+
+<!---LEARNR EX 1-->
+
+<iframe style="margin:0 auto; min-width: 100%;" class="interactive" id="lab-3-glm-01" src="https://brendancullen.shinyapps.io/test-calculator/" scrolling="no" frameborder="no"></iframe>
+
+<!------------->
 
 # Purpose
 
@@ -772,3 +780,8 @@ model <- lm(sr_health ~ consc, data = health)
 ```
 
 3d. What does this show you about the relationship between the 95% CI's around the model coefficients and the 95% CI band around the regression line? 
+
+
+<script>
+  iFrameResize({}, ".interactive");
+</script>
