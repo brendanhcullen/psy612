@@ -3444,10 +3444,125 @@ print(y_mat)</code></pre>
 <iframe style="margin:0 auto; min-width: 100%;" id="lab-3-glm-ex5" class="interactive" src="https://brendancullen.shinyapps.io/lab-3-glm-ex5/" scrolling="no" frameborder="no">
 </iframe>
 <!------------->
+<p><br></p>
+</div>
+</div>
+</div>
+<div id="glm" class="section level1">
+<h1>The General Linear Model</h1>
+<ul>
+<li><p>We just saw that regression works “under the hood” by solving a matrix algebra equation to get the intercept and slope of the regression line. As Sara mentioned in class, this matrix algebra equation works for <em>any</em> type of data we have. This should clue us into the idea that there is some fundamental process going on behind the scenes of all of our models…</p></li>
+<li><p>The <strong>general linear model (GLM)</strong> is a family of models that assume the relationship between your DV and IV(s) is linear and additive, and that your outcome is normally distributed. In its simplest form, we can think of the general linear model as:</p></li>
+</ul>
+<p><span class="math display">\[Data = Model + Error \]</span></p>
+<ul>
+<li><p>This provides a unifying framework for all of the statistical tests we have learned (or at least touched on) so far: <em>t</em>-tests, correlations, ANOVA, and linear regression. All of these tests are really doing the same math at the end of the day.</p></li>
+<li><p>To illustrate this, we’ll turn back to an <a href="https://uopsych.github.io/psy611/labs/lab-8.html#the_data" target="_&quot;blank&quot;">example from PSY611</a>. The data are from Fox and Guyer’s (1978) anonymity and cooperation study. The data are included in the <code>{carData}</code> package, and you can see information about the data set using <code>?Guyer</code>. Twenty groups of four participants each played 30 trials of the the prisoner’s dilemma game. The number of cooperative choices (<code>cooperation</code>) made by each group were scored out of 120 (i.e., cooperative choices made by 4 participants over 30 trials). The groups either made decisions publicly or privately (<code>condition</code>).</p></li>
+<li><p>You can load in the data with the following code:</p></li>
+</ul>
+<pre class="r"><code>guyer &lt;- carData::Guyer</code></pre>
+<ul>
+<li>Let’s look at the first few rows…</li>
+</ul>
+<div id="section-22" class="section level4 tabset tabset-fade tabset-pills">
+<h4></h4>
+<div id="code-11" class="section level5">
+<h5>Code</h5>
+<pre class="r"><code>head(guyer)</code></pre>
+</div>
+<div id="output-11" class="section level5">
+<h5>Output</h5>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["cooperation"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["condition"],"name":[2],"type":["fctr"],"align":["left"]},{"label":["sex"],"name":[3],"type":["fctr"],"align":["left"]}],"data":[{"1":"49","2":"public","3":"male","_rn_":"1"},{"1":"64","2":"public","3":"male","_rn_":"2"},{"1":"37","2":"public","3":"male","_rn_":"3"},{"1":"52","2":"public","3":"male","_rn_":"4"},{"1":"68","2":"public","3":"male","_rn_":"5"},{"1":"54","2":"public","3":"female","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<div id="section-23" class="section level4">
+<h4></h4>
+<p><br></p>
+<ul>
+<li>…and the structure of the data</li>
+</ul>
+</div>
+<div id="section-24" class="section level4 tabset tabset-fade tabset-pills">
+<h4></h4>
+<div id="code-12" class="section level5">
+<h5>Code</h5>
+<pre class="r"><code>str(guyer)</code></pre>
+</div>
+<div id="output-12" class="section level5">
+<h5>Output</h5>
+<pre><code>## 'data.frame':    20 obs. of  3 variables:
+##  $ cooperation: num  49 64 37 52 68 54 61 79 64 29 ...
+##  $ condition  : Factor w/ 2 levels &quot;anonymous&quot;,&quot;public&quot;: 2 2 2 2 2 2 2 2 2 2 ...
+##  $ sex        : Factor w/ 2 levels &quot;female&quot;,&quot;male&quot;: 2 2 2 2 2 1 1 1 1 1 ...</code></pre>
+</div>
+</div>
+<div id="section-25" class="section level4">
+<h4></h4>
+<p><br></p>
+<ul>
+<li>Covert the <code>condition</code> variable to <code>0's</code> and <code>1's</code>. We will talk more about dummy coding in a future lab.</li>
+</ul>
+</div>
+<div id="section-26" class="section level4 tabset tabset-fade tabset-pills">
+<h4></h4>
+<div id="code-13" class="section level5">
+<h5>Code</h5>
+<pre class="r"><code>guyer &lt;-  guyer %&gt;% 
+  mutate(condition = case_when(condition == &quot;public&quot; ~ 0,
+                               condition == &quot;anonymous&quot; ~ 1))
+
+guyer</code></pre>
+</div>
+<div id="output-13" class="section level5">
+<h5>Output</h5>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["cooperation"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["condition"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["sex"],"name":[3],"type":["fctr"],"align":["left"]}],"data":[{"1":"49","2":"0","3":"male"},{"1":"64","2":"0","3":"male"},{"1":"37","2":"0","3":"male"},{"1":"52","2":"0","3":"male"},{"1":"68","2":"0","3":"male"},{"1":"54","2":"0","3":"female"},{"1":"61","2":"0","3":"female"},{"1":"79","2":"0","3":"female"},{"1":"64","2":"0","3":"female"},{"1":"29","2":"0","3":"female"},{"1":"27","2":"1","3":"male"},{"1":"58","2":"1","3":"male"},{"1":"52","2":"1","3":"male"},{"1":"41","2":"1","3":"male"},{"1":"30","2":"1","3":"male"},{"1":"40","2":"1","3":"female"},{"1":"39","2":"1","3":"female"},{"1":"44","2":"1","3":"female"},{"1":"34","2":"1","3":"female"},{"1":"44","2":"1","3":"female"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<div id="section-27" class="section level4">
+<h4></h4>
+<p><br></p>
+</div>
+<div id="t-test" class="section level2">
+<h2><em>t</em>-test</h2>
+<ul>
+<li>Fill in the blanks in the code below to run an independent samples t-test testing the difference in mean number of cooperative choices made in the <code>public</code> and <code>anonymous</code> conditions. Use the <code>t.test()</code> function and assume the homogeneity of variance assumption has been met.</li>
+</ul>
+<!---LEARNR EX 6-->
+<iframe style="margin:0 auto; min-width: 100%;" id="lab-3-glm-ex6" class="interactive" src="https://brendancullen.shinyapps.io/lab-3-glm-ex6/" scrolling="no" frameborder="no">
+</iframe>
+<!------------->
+<blockquote>
+<p><strong>Question:</strong> What is the 95% CI around?</p>
+</blockquote>
+</div>
+<div id="correlation" class="section level2">
+<h2>Correlation</h2>
+<blockquote>
+<p><strong>Question:</strong> What is the 95% CI around this time?</p>
+</blockquote>
+</div>
+<div id="anova" class="section level2">
+<h2>ANOVA</h2>
+<blockquote>
+<p><strong>Question:</strong> What is the relationship between the <em>F</em> statistic from this ANOVA and the <em>t</em> statistic from our previous two tests?</p>
+</blockquote>
+</div>
+<div id="regression" class="section level2">
+<h2>Regression</h2>
+<blockquote>
+<p><strong>Question:</strong> What does the intercept represent? The slope?</p>
+</blockquote>
 <script>
   iFrameResize({}, ".interactive");
 </script>
-</div>
 </div>
 </div>
 

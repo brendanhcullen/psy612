@@ -469,6 +469,123 @@ $$\mathbf{B} = (\mathbf{X'X})^{-1} \mathbf{X'Y}$$
 
 <!------------->
 
+<br>
+
+# The General Linear Model{#glm}
+
+* We just saw that regression works "under the hood" by solving a matrix algebra equation to get the intercept and slope of the regression line. As Sara mentioned in class, this matrix algebra equation works for *any* type of data we have. This should clue us into the idea that there is some fundamental process going on behind the scenes of all of our models...
+
+* The **general linear model (GLM)** is a family of models that assume the relationship between your DV and IV(s) is linear and additive, and that your outcome is normally distributed. In its simplest form, we can think of the general linear model as: 
+
+$$Data = Model + Error $$ 
+
+* This provides a unifying framework for all of the statistical tests we have learned (or at least touched on) so far: *t*-tests, correlations, ANOVA, and linear regression. All of these tests are really doing the same math at the end of the day.
+
+* To illustrate this, we'll turn back to an [example from PSY611](https://uopsych.github.io/psy611/labs/lab-8.html#the_data){target=_"blank"}. The data are from Fox and Guyer’s (1978) anonymity and cooperation study. The data are included in the `{carData}` package, and you can see information about the data set using `?Guyer`. Twenty groups of four participants each played 30 trials of the the prisoner’s dilemma game. The number of cooperative choices (`cooperation`) made by each group were scored out of 120 (i.e., cooperative choices made by 4 participants over 30 trials). The groups either made decisions publicly or privately (`condition`).
+
+* You can load in the data with the following code:
+
+```{r lab-3-37}
+guyer <- carData::Guyer
+```
+
+* Let's look at the first few rows...
+
+####  {.tabset .tabset-fade .tabset-pills}
+
+##### Code
+
+```{r lab-3-38, eval=FALSE}
+head(guyer)
+```
+
+##### Output
+
+```{r lab-3-39, echo=FALSE, ref.label='lab-3-38'}
+```
+
+####
+<br>
+
+* ...and the structure of the data 
+
+####  {.tabset .tabset-fade .tabset-pills}
+
+##### Code
+
+```{r lab-3-40, eval=FALSE}
+str(guyer)
+```
+
+##### Output
+
+```{r lab-3-41, echo=FALSE, ref.label='lab-3-40'}
+```
+
+####
+<br>
+
+* Covert the `condition` variable to `0's` and `1's`. We will talk more about dummy coding in a future lab. 
+
+####  {.tabset .tabset-fade .tabset-pills}
+
+##### Code
+
+```{r lab-3-42, eval=FALSE}
+guyer <-  guyer %>% 
+  mutate(condition = case_when(condition == "public" ~ 0,
+                               condition == "anonymous" ~ 1))
+
+guyer
+```
+
+##### Output
+
+```{r lab-3-43, echo=FALSE, ref.label='lab-3-42'}
+```
+
+####
+<br>
+
+## *t*-test
+
+* Fill in the blanks in the code below to run an independent samples t-test testing the difference in mean number of cooperative choices made in the `public` and `anonymous` conditions. Use the `t.test()` function and assume the homogeneity of variance assumption has been met. 
+
+<!---LEARNR EX 6-->
+
+<iframe style="margin:0 auto; min-width: 100%;" id="lab-3-glm-ex6" class="interactive" src="https://brendancullen.shinyapps.io/lab-3-glm-ex6/" scrolling="no" frameborder="no"></iframe>
+
+<!------------->
+
+
+>**Question:** What is the 95% CI around? 
+
+
+## Correlation 
+
+* Fill in the blanks in the code below to run a correlation test between `cooperation` and `condition`. Use the `cor.test()` function.
+
+
+
+
+>**Question:** What is the 95% CI around this time? 
+
+
+## ANOVA
+
+* Fill in the blanks in the code below to run an ANOVA testing the difference in mean number of cooperative choices made in the `public` and `anonymous` conditions. Use the `aov()` function.
+
+>**Question:** What is the relationship between the *F* statistic from this ANOVA and the *t* statistic from our previous two tests?
+
+
+## Regression
+
+* Fill in the blanks in the code below to run a linear regression model where `cooperation` varies as a function of `condition`. Use the familiar `lm()` function.
+
+>**Question:** What does the intercept represent? The slope? 
+
+
+
 
 
 <script>
