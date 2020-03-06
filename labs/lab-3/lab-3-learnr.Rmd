@@ -337,6 +337,137 @@ consc_data_new
 
 <!------------->
 
+<br> 
+
+## Other visualization tools
+
+* `sjPlot::plot_model()`
+
+####  {.tabset .tabset-fade .tabset-pills}
+
+##### Code
+
+```{r lab-3-25, eval=FALSE}
+plot_model(model = model,    # name of model object
+           type = "pred",    # show predicted values (i.e. regression line)
+           show.data = TRUE, # include data points on plot
+           jitter = TRUE)    # add small amount of random variation to  to prevent overlap
+```
+
+##### Output
+
+```{r lab-3-26, echo=FALSE, ref.label='lab-3-25'}
+```
+
+####
+<br>
+
+* `ggpubr::ggscatter()`
+
+####  {.tabset .tabset-fade .tabset-pills}
+
+##### Code
+
+```{r lab-3-27, eval=FALSE}
+ggscatter(data = health,              # name of data.frame
+          x = "consc",                # IV (must be quoted)
+          y = "sr_health",            # DV (must be quoted)
+          add = "reg.line",           # add regression line
+          xlab = "Conscientiousness", # x-axis label
+          ylab = "Self-rated health", # y-axis label
+          conf.int = TRUE,            # show 95% confidence band around regression line
+          cor.coef = TRUE)            # display correlation coefficient and p-value
+```
+
+##### Output
+
+```{r lab-3-28, echo=FALSE, ref.label='lab-3-27'}
+```
+
+####
+<br>
+
+***
+
+# Regression with matrix algebra{#matrix}
+
+## Review
+
+* Consider our regression equation:
+
+$$\mathbf{y} = b_0 + b_1\mathbf{x} + e$$
+
+* Recall that `y` is a vector of values, which can be represented as an $n\times1$ matrix, $\mathbf{Y}$. Similarly, `x` can be represented as an $n\times1$ matrix, $\mathbf{X}$.
+
+* If we augment the matrix $\mathbf{X}$ to be an $n\times2$ matrix, in which the first column is filled with `1`'s, we can simplify our regression equation (one property of the residuals is that the the average residual is 0, so we can remove `e` from the equation as well): 
+
+$$\mathbf{Y} = \mathbf{XB}$$
+
+* Note: $\mathbf{B}$ is a $2 \times 1$ matrix containing our estimates of the intercept and slope. 
+
+## Example
+
+* Let's illustrate how this works by running our regression analysis (self-rated health ~ conscientiousness) using matrix algebra. 
+
+* Create the **`X`** matrix 
+
+####  {.tabset .tabset-fade .tabset-pills}
+
+##### Code
+
+```{r lab-3-29, eval=FALSE}
+x_mat <- health %>% # start with the original data frame
+  mutate(ones = rep(1, nrow(.))) %>% # create a column of 1's to represent the intercept
+  select(ones, consc) %>% # select only the column of 1's and X variable
+  as.matrix() %>%  # coerce to a matrix
+  unname() # get rid of dimnames 
+
+print(x_mat)
+```
+
+##### Output
+
+```{r lab-3-30, echo=FALSE, ref.label='lab-3-29'}
+```
+
+####
+<br>
+
+* Create the **`Y`** matrix 
+
+####  {.tabset .tabset-fade .tabset-pills}
+
+##### Code
+
+```{r lab-3-31, eval=FALSE}
+y_mat <- health %>% # start with the original data frame
+  select(sr_health) %>% # select just the Y variable
+  as.matrix() %>% # coerce to a matrix
+  unname() # get rid of dimnames 
+
+print(y_mat)
+```
+
+##### Output
+
+```{r lab-3-32, echo=FALSE, ref.label='lab-3-31'}
+```
+
+####
+<br>
+
+* Recall the matrix algebra formula to solve for the **`B`** matrix
+
+$$\mathbf{B} = (\mathbf{X'X})^{-1} \mathbf{X'Y}$$
+
+
+* Fill in the blanks in the code below to solve for the model coefficients. Check out the hint if you can't think of which functions to use! And see [here](https://uopsych.github.io/psy611/labs/lab-3.html){target="_blank"} for a refresher on matrix algebra. 
+
+<!---LEARNR EX 5-->
+
+<iframe style="margin:0 auto; min-width: 100%;" id="lab-3-glm-ex5" class="interactive" src="https://brendancullen.shinyapps.io/lab-3-glm-ex5/" scrolling="no" frameborder="no"></iframe>
+
+<!------------->
 
 
 
