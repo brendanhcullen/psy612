@@ -652,44 +652,34 @@ guyer
 
 ## Minihack 2: Confidence intervals{#minihack2}
 
-* For this minihack, we will refer back to the example about conscientiousness and health. We used `confint()` to calculate the 95% CI for our regression coefficients. Your job is start with the model output, stored as a list object (see below), and extract the relevant pieces of information to calculate the 95% CI around the intercept and slope. 
+* For this minihack, we will refer back to the example about conscientiousness and health. We used `confint()` to calculate the 95% CI for our regression coefficients. Your job is start with the model output, stored as a list object, and extract the relevant pieces of information to calculate the 95% CI around the intercept and slope. 
 
-```{r lab-3-59, eval=FALSE}
+
+1. Calculate confidence intervals "by hand". (Hint: Use `qt()` to draw from a *t* distribution)
+
+* Here's the model output again for reference. 
+
+```{r}
 model <- lm(sr_health ~ consc, data = health)
+model_summary <- summary(model)
+model_summary
 ```
 
-1. Calculate confidence intervals "by hand". 
 
-```{r lab-3-60}
-# your code here
-```
+<!---LEARNR EX 10-->
+
+<iframe style="margin:0 auto; min-width: 100%;" id="lab-3-glm-ex10" class="interactive" src="https://brendancullen.shinyapps.io/lab-3-glm-ex10/" scrolling="no" frameborder="no"></iframe>
+
+<!------------->
+
 
 2. Verify that your answer corresponds to the result from `confint()`. 
 
-```{r lab-3-61}
-# your code here
-```
+<!---LEARNR EX 11-->
 
-3. Create a scatter plot representing the relationship between conscientiousness and self-rated health with a regression line and 95% confidence band. 
+<iframe style="margin:0 auto; min-width: 100%;" id="lab-3-glm-ex11" class="interactive" src="https://brendancullen.shinyapps.io/lab-3-glm-ex11/" scrolling="no" frameborder="no"></iframe>
 
-```{r lab-3-62}
-# your code here
-```
-
-3a. Add a line whose intercept is the lower bound of the 95% CI for the model intercept and whose slope is the upper bound of the 95% CI for the model slope. Hint: see `?geom_abline()`
-
-```{r lab-3-63}
-# your code here
-```
-
-
-3b. Now add another line whose intercept is the upper bound of the 95% CI for the model intercept and whose slope is the lower bound of the 95% CI for the model slope. 
-
-```{r lab-3-64}
-# your code here
-```
-
-3d. What does this show you about the relationship between the 95% CI's around the model coefficients and the 95% CI band around the regression line? 
+<!------------->
 
 
 <script>

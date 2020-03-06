@@ -3624,26 +3624,46 @@ guyer</code></pre>
 <div id="minihack2" class="section level2">
 <h2>Minihack 2: Confidence intervals</h2>
 <ul>
-<li>For this minihack, we will refer back to the example about conscientiousness and health. We used <code>confint()</code> to calculate the 95% CI for our regression coefficients. Your job is start with the model output, stored as a list object (see below), and extract the relevant pieces of information to calculate the 95% CI around the intercept and slope.</li>
+<li>For this minihack, we will refer back to the example about conscientiousness and health. We used <code>confint()</code> to calculate the 95% CI for our regression coefficients. Your job is start with the model output, stored as a list object, and extract the relevant pieces of information to calculate the 95% CI around the intercept and slope.</li>
 </ul>
-<pre class="r"><code>model &lt;- lm(sr_health ~ consc, data = health)</code></pre>
 <ol style="list-style-type: decimal">
-<li>Calculate confidence intervals “by hand”.</li>
+<li>Calculate confidence intervals “by hand”. (Hint: Use <code>qt()</code> to draw from a <em>t</em> distribution)</li>
 </ol>
-<pre class="r"><code># your code here</code></pre>
+<ul>
+<li>Here’s the model output again for reference.</li>
+</ul>
+<pre class="r"><code>model &lt;- lm(sr_health ~ consc, data = health)
+model_summary &lt;- summary(model)
+model_summary</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = sr_health ~ consc, data = health)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -1.5450 -0.6414 -0.1623  0.6817  2.0154 
+## 
+## Coefficients:
+##             Estimate Std. Error t value  Pr(&gt;|t|)    
+## (Intercept)   1.6570     0.3571   4.641 0.0000203 ***
+## consc         0.4904     0.1188   4.128  0.000119 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.8854 on 58 degrees of freedom
+## Multiple R-squared:  0.2271, Adjusted R-squared:  0.2138 
+## F-statistic: 17.04 on 1 and 58 DF,  p-value: 0.0001186</code></pre>
+<!---LEARNR EX 10-->
+<iframe style="margin:0 auto; min-width: 100%;" id="lab-3-glm-ex10" class="interactive" src="https://brendancullen.shinyapps.io/lab-3-glm-ex10/" scrolling="no" frameborder="no">
+</iframe>
+<!------------->
 <ol start="2" style="list-style-type: decimal">
 <li>Verify that your answer corresponds to the result from <code>confint()</code>.</li>
 </ol>
-<pre class="r"><code># your code here</code></pre>
-<ol start="3" style="list-style-type: decimal">
-<li>Create a scatter plot representing the relationship between conscientiousness and self-rated health with a regression line and 95% confidence band.</li>
-</ol>
-<pre class="r"><code># your code here</code></pre>
-<p>3a. Add a line whose intercept is the lower bound of the 95% CI for the model intercept and whose slope is the upper bound of the 95% CI for the model slope. Hint: see <code>?geom_abline()</code></p>
-<pre class="r"><code># your code here</code></pre>
-<p>3b. Now add another line whose intercept is the upper bound of the 95% CI for the model intercept and whose slope is the lower bound of the 95% CI for the model slope.</p>
-<pre class="r"><code># your code here</code></pre>
-<p>3d. What does this show you about the relationship between the 95% CI’s around the model coefficients and the 95% CI band around the regression line?</p>
+<!---LEARNR EX 11-->
+<iframe style="margin:0 auto; min-width: 100%;" id="lab-3-glm-ex11" class="interactive" src="https://brendancullen.shinyapps.io/lab-3-glm-ex11/" scrolling="no" frameborder="no">
+</iframe>
+<!------------->
 <script>
   iFrameResize({}, ".interactive");
 </script>
