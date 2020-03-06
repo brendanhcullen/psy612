@@ -549,7 +549,7 @@ guyer
 
 ## *t*-test
 
-* Fill in the blanks in the code below to run an independent samples t-test testing the difference in mean number of cooperative choices made in the `public` and `anonymous` conditions. Use the `t.test()` function and assume the homogeneity of variance assumption has been met. 
+* Fill in the blanks in the code below to run an independent samples t-test testing the difference in mean number of cooperative choices made in the `public` and `anonymous` conditions. Assume the homogeneity of variance assumption has been met. 
 
 <!---LEARNR EX 6-->
 
@@ -563,7 +563,7 @@ guyer
 
 ## Correlation 
 
-* Fill in the blanks in the code below to run a correlation test between `cooperation` and `condition`. Use the `cor.test()` function.
+* Fill in the blanks in the code below to run a correlation test between `cooperation` and `condition`.
 
 <!---LEARNR EX 7-->
 
@@ -577,7 +577,7 @@ guyer
 
 ## ANOVA
 
-* Fill in the blanks in the code below to run an ANOVA testing the difference in mean number of cooperative choices made in the `public` and `anonymous` conditions. Use the `aov()` function.
+* Fill in the blanks in the code below to run an ANOVA testing the difference in mean number of cooperative choices made in the `public` and `anonymous` conditions.
 
 <!---LEARNR EX 8-->
 
@@ -590,12 +590,17 @@ guyer
 
 ## Regression
 
-* Fill in the blanks in the code below to run a linear regression model where `cooperation` varies as a function of `condition`. Use the familiar `lm()` function.
+* Fill in the blanks in the code below to run a linear regression model where `cooperation` varies as a function of `condition`.
+
+<!---LEARNR EX 9-->
+
+<iframe style="margin:0 auto; min-width: 100%;" id="lab-3-glm-ex9" class="interactive" src="https://brendancullen.shinyapps.io/lab-3-glm-ex9/" scrolling="no" frameborder="no"></iframe>
+
+<!------------->
 
 >**Question:** What does the intercept represent? The slope? 
 
-
-
+* Note: The *p* values from all 4 models you just ran are exactly the same! Why? Because all 4 tests are all based on the same underlying general linear model!
 
 
 <script>
