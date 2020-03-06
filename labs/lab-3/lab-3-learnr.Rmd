@@ -565,7 +565,11 @@ guyer
 
 * Fill in the blanks in the code below to run a correlation test between `cooperation` and `condition`. Use the `cor.test()` function.
 
+<!---LEARNR EX 7-->
 
+<iframe style="margin:0 auto; min-width: 100%;" id="lab-3-glm-ex7" class="interactive" src="https://brendancullen.shinyapps.io/lab-3-glm-ex7/" scrolling="no" frameborder="no"></iframe>
+
+<!------------->
 
 
 >**Question:** What is the 95% CI around this time? 
