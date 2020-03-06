@@ -602,6 +602,95 @@ guyer
 
 * Note: The *p* values from all 4 models you just ran are exactly the same! Why? Because all 4 tests are all based on the same underlying general linear model!
 
+<br>
+
+# Minihacks
+
+## Minihack 1: Matrix algebra
+
+* Continuing with the `guyer` dataset example, use matrix algebra to manually calculate the intercept and slope for the regression equation (`cooperation` ~ `condition`). 
+
+* Hint: To find the inverse of a matrix, use the `solve()` function. Refer back to the [lab on matrix algebra](https://uopsych.github.io/psy611/labs/lab-3.html){target="_blank"} from 611 for a refresher on other matrix operations if needed. 
+
+1. Create the Matrix $\mathbf{X}$ & Vector $\mathbf{Y}$
+
+```{r lab-3-53}
+# your code here
+```
+
+2. Produce $\mathbf{X'}$ (also called $\mathbf{X^T}$ or the transpose of $\mathbf{X}$)
+
+```{r lab-3-54}
+# your code here
+```
+
+3. Produce $\mathbf{X'X}^{-1}$ (inverse of $\mathbf{X'X}$)
+
+```{r lab-3-55}
+# your code here
+```
+
+4. Produce $\mathbf{X'Y}$
+
+```{r lab-3-56}
+# your code here
+```
+
+5. Produce $\mathbf{B = (X'X)}^{-1}\mathbf{X'Y}$
+
+```{r lab-3-57}
+# your code here
+```
+
+6. Confirm your results using the `lm()` function in R.
+
+```{r lab-3-58}
+# your code here
+```
+
+***
+
+## Minihack 2: Confidence intervals{#minihack2}
+
+* For this minihack, we will refer back to the example about conscientiousness and health. We used `confint()` to calculate the 95% CI for our regression coefficients. Your job is start with the model output, stored as a list object (see below), and extract the relevant pieces of information to calculate the 95% CI around the intercept and slope. 
+
+```{r lab-3-59, eval=FALSE}
+model <- lm(sr_health ~ consc, data = health)
+```
+
+1. Calculate confidence intervals "by hand". 
+
+```{r lab-3-60}
+# your code here
+```
+
+2. Verify that your answer corresponds to the result from `confint()`. 
+
+```{r lab-3-61}
+# your code here
+```
+
+3. Create a scatter plot representing the relationship between conscientiousness and self-rated health with a regression line and 95% confidence band. 
+
+```{r lab-3-62}
+# your code here
+```
+
+3a. Add a line whose intercept is the lower bound of the 95% CI for the model intercept and whose slope is the upper bound of the 95% CI for the model slope. Hint: see `?geom_abline()`
+
+```{r lab-3-63}
+# your code here
+```
+
+
+3b. Now add another line whose intercept is the upper bound of the 95% CI for the model intercept and whose slope is the lower bound of the 95% CI for the model slope. 
+
+```{r lab-3-64}
+# your code here
+```
+
+3d. What does this show you about the relationship between the 95% CI's around the model coefficients and the 95% CI band around the regression line? 
+
 
 <script>
   iFrameResize({}, ".interactive");

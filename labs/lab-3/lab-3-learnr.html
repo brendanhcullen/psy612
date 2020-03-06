@@ -3584,6 +3584,66 @@ guyer</code></pre>
 <ul>
 <li>Note: The <em>p</em> values from all 4 models you just ran are exactly the same! Why? Because all 4 tests are all based on the same underlying general linear model!</li>
 </ul>
+<p><br></p>
+</div>
+</div>
+<div id="minihacks" class="section level1">
+<h1>Minihacks</h1>
+<div id="minihack-1-matrix-algebra" class="section level2">
+<h2>Minihack 1: Matrix algebra</h2>
+<ul>
+<li><p>Continuing with the <code>guyer</code> dataset example, use matrix algebra to manually calculate the intercept and slope for the regression equation (<code>cooperation</code> ~ <code>condition</code>).</p></li>
+<li><p>Hint: To find the inverse of a matrix, use the <code>solve()</code> function. Refer back to the <a href="https://uopsych.github.io/psy611/labs/lab-3.html" target="_blank">lab on matrix algebra</a> from 611 for a refresher on other matrix operations if needed.</p></li>
+</ul>
+<ol style="list-style-type: decimal">
+<li>Create the Matrix <span class="math inline">\(\mathbf{X}\)</span> &amp; Vector <span class="math inline">\(\mathbf{Y}\)</span></li>
+</ol>
+<pre class="r"><code># your code here</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>Produce <span class="math inline">\(\mathbf{X'}\)</span> (also called <span class="math inline">\(\mathbf{X^T}\)</span> or the transpose of <span class="math inline">\(\mathbf{X}\)</span>)</li>
+</ol>
+<pre class="r"><code># your code here</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>Produce <span class="math inline">\(\mathbf{X'X}^{-1}\)</span> (inverse of <span class="math inline">\(\mathbf{X'X}\)</span>)</li>
+</ol>
+<pre class="r"><code># your code here</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>Produce <span class="math inline">\(\mathbf{X'Y}\)</span></li>
+</ol>
+<pre class="r"><code># your code here</code></pre>
+<ol start="5" style="list-style-type: decimal">
+<li>Produce <span class="math inline">\(\mathbf{B = (X'X)}^{-1}\mathbf{X'Y}\)</span></li>
+</ol>
+<pre class="r"><code># your code here</code></pre>
+<ol start="6" style="list-style-type: decimal">
+<li>Confirm your results using the <code>lm()</code> function in R.</li>
+</ol>
+<pre class="r"><code># your code here</code></pre>
+<hr />
+</div>
+<div id="minihack2" class="section level2">
+<h2>Minihack 2: Confidence intervals</h2>
+<ul>
+<li>For this minihack, we will refer back to the example about conscientiousness and health. We used <code>confint()</code> to calculate the 95% CI for our regression coefficients. Your job is start with the model output, stored as a list object (see below), and extract the relevant pieces of information to calculate the 95% CI around the intercept and slope.</li>
+</ul>
+<pre class="r"><code>model &lt;- lm(sr_health ~ consc, data = health)</code></pre>
+<ol style="list-style-type: decimal">
+<li>Calculate confidence intervals “by hand”.</li>
+</ol>
+<pre class="r"><code># your code here</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>Verify that your answer corresponds to the result from <code>confint()</code>.</li>
+</ol>
+<pre class="r"><code># your code here</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>Create a scatter plot representing the relationship between conscientiousness and self-rated health with a regression line and 95% confidence band.</li>
+</ol>
+<pre class="r"><code># your code here</code></pre>
+<p>3a. Add a line whose intercept is the lower bound of the 95% CI for the model intercept and whose slope is the upper bound of the 95% CI for the model slope. Hint: see <code>?geom_abline()</code></p>
+<pre class="r"><code># your code here</code></pre>
+<p>3b. Now add another line whose intercept is the upper bound of the 95% CI for the model intercept and whose slope is the lower bound of the 95% CI for the model slope.</p>
+<pre class="r"><code># your code here</code></pre>
+<p>3d. What does this show you about the relationship between the 95% CI’s around the model coefficients and the 95% CI band around the regression line?</p>
 <script>
   iFrameResize({}, ".interactive");
 </script>
