@@ -163,6 +163,137 @@ model %>% # start with our model object
 
 <!------------->
 
+<br>
+
+* The animation below is an example of a ["Hypothetical Outcomes Plot"](https://github.com/wilkelab/ungeviz){target="_blank"} (HOP) that visually demonstrates what this 95% CI band represents. In essence, this plot shows what the regression line could look like if we were to repeat our experiment over and over (sampling from the same population each time). 
+
+```{r echo=FALSE}
+library(ungeviz)
+library(gganimate)
+library(transformr)
+library(gifski)
+
+set.seed(012220)
+
+boots <- bootstrapper(100)
+
+p <- health %>%
+  ggplot(aes(x = consc, y = sr_health)) +
+  geom_smooth(method = "lm", color = NA) +
+  geom_point(alpha = 0.3) +
+  geom_smooth(data = boots, method = "lm", fullrange = TRUE, se = FALSE) +
+  theme_minimal() +
+  labs(x = "Conscientiousness", y = "Self-rated health") +
+  transition_states(.draw, 1, 1) +
+  enter_fade() +
+  exit_fade() +
+  ease_aes()
+
+animate(p, fps = 3)
+
+```
+<br>
+
+## Prediction
+
+* A regression line, by definition, corresponds to the line that gives the *mean* value of `Y` corresponding to each possible value of `X`, i.e. `E(Y|X)`. 
+
+* In addition, we can also predict an individual's score ($Y_i$) for any value of `X`. From our regression model, we have the following equation that mathematically represents the relationship between conscientiousness and self-rated health: 
+
+$$\hat{health}_{i} = 1.6569733 + 0.4904059 * consc_{i}$$
+<br> 
+
+* For example, if we know someone's conscientiousness score is `3.5`, we can easily predict their score for self-rated health according to our model: 
+
+$$\hat{health} = 1.6569733 + 0.4904059*3.5 = 3.374$$
+
+
+* The `predict()` function gives us an easy way to get the predicted `Y` values from all the `X` values in our dataset.  
+
+####  {.tabset .tabset-fade .tabset-pills}
+
+##### Code
+
+```{r lab-3-11, eval=FALSE}
+predict(model)
+```
+
+##### Output
+
+```{r lab-3-12, echo=FALSE, ref.label='lab-3-11'}
+```
+
+####
+<br>
+
+* This should look familiar, as we already have gotten this information from `broom::augment()`. 
+
+####  {.tabset .tabset-fade .tabset-pills}
+
+##### Code
+
+```{r lab-3-13, eval=FALSE}
+augment(model)$.fitted
+```
+
+##### Output
+
+```{r lab-3-14, echo=FALSE, ref.label='lab-3-13'}
+```
+
+####
+<br>
+
+
+### Prediction bands
+
+* We can use this information to create "prediction bands". First we will generate our predicted values (i.e. fitted values) along with a "prediction interval" (lower and upper bound) for each of these values. 
+
+####  {.tabset .tabset-fade .tabset-pills}
+
+##### Code
+
+```{r lab-3-15, eval=FALSE, message=FALSE}
+predicted <- predict(model, interval = "prediction")
+predicted
+```
+
+##### Output
+
+```{r lab-3-16, echo=FALSE, ref.label='lab-3-15'}
+```
+
+####
+<br>
+
+* Next we'll bind these predicted values (and their prediction intervals) to our original dataset, so we can create a plot from a single data frame.
+
+####  {.tabset .tabset-fade .tabset-pills}
+
+##### Code
+
+```{r lab-3-17, eval=FALSE}
+pred_plot_data <- cbind(health, predicted)
+pred_plot_data
+```
+
+##### Output
+
+```{r lab-3-18, echo=FALSE, ref.label='lab-3-17'}
+```
+
+####
+<br>
+
+* And finally, we'll plot a prediction band on top of the data by adding a `geom_ribbon()`. This prediction band gives us, for every value of `X`, the interval that represents the range of values that is likely to contain the value of a single new individual observation. Unlike confidence intervals, prediction intervals predict the spread for individual observations rather than the mean.
+
+* Fill in the blanks in the code to create a plot of the prediction band for our model. Pay special attention to `lwr` and `upr` within `pred_plot_data` above. How will you incorporate thise variables into the plot? 
+
+<!---LEARNR EX 3-->
+
+<iframe style="margin:0 auto; min-width: 100%;" id="lab-3-glm-ex3" class="interactive" src="https://brendancullen.shinyapps.io/lab-3-glm-ex3/" scrolling="no" frameborder="no"></iframe>
+
+<!------------->
 
 
 
