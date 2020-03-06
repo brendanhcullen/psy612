@@ -630,7 +630,11 @@ guyer
 
 3. Confirm your results using the `lm()` function in R.
 
+<!---LEARNR EX 14-->
 
+<iframe style="margin:0 auto; min-width: 100%;" id="lab-3-glm-ex14" class="interactive" src="https://brendancullen.shinyapps.io/lab-3-glm-ex14/" scrolling="no" frameborder="no"></iframe>
+
+<!------------->
 
 ***
 
