@@ -579,6 +579,12 @@ guyer
 
 * Fill in the blanks in the code below to run an ANOVA testing the difference in mean number of cooperative choices made in the `public` and `anonymous` conditions. Use the `aov()` function.
 
+<!---LEARNR EX 8-->
+
+<iframe style="margin:0 auto; min-width: 100%;" id="lab-3-glm-ex8" class="interactive" src="https://brendancullen.shinyapps.io/lab-3-glm-ex8/" scrolling="no" frameborder="no"></iframe>
+
+<!------------->
+
 >**Question:** What is the relationship between the *F* statistic from this ANOVA and the *t* statistic from our previous two tests?
 
 
