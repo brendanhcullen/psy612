@@ -1,7 +1,9 @@
 ---
-title: "Lab 3: Univariate Regression (II) & GLM"
+title: "Simple Regression & The General Linear Model"
 output: 
-  html_document: 
+  html_document:
+    include:
+      in_header: header.html 
     fig_caption: yes
     theme: cosmo
     toc: yes
@@ -17,20 +19,7 @@ knitr::opts_chunk$set(echo = TRUE, rows.print = 10)
 options(scipen = 999)
 ```
 
-
-# Purpose
-
-Today we will briefly review univariate regression and then will discuss how to summarize and visualize uncertainty in regression models using a variety of plotting methods. We will then touch on how to estimate regression coefficients using matrix algebra. Lastly, we will introduce the General Linear Model and demonstrate how GLM can be used to understand all of the statistical tests we have learned so far (*t*-tests, ANOVA, correlations, regressions) within one unifying framework. 
-
-To quickly navigate to the desired section, click one of the following links:
-
-1. [Visualizing uncertainty](#uncertainty)
-1. [Regression with matrix algebra](#matrix)
-1. [The General Linear Model](#glm)
-
-You will need to load the following libraries to follow along with today's lab. If you don't have any of these packages installed, please do so now. 
-
-```{r lab-3-1, message=FALSE}
+```{r lab-3-1, echo=FALSE, message=FALSE}
 library(tidyverse) # for plotting and data wrangling
 library(rio) # for importing data
 library(broom) # for cleaning up output
@@ -39,46 +28,59 @@ library(ggpubr) # for plotting
 library(carData) # for Guyer dataset
 ```
 
-***
 
-# Visualizing uncertainty{#uncertainty}
+# Purpose
 
-* We're going to use the same dataset [from previous labs](https://uopsych.github.io/psy612/labs/lab-1/lab-1.html#hypothesis_testing_with_correlations){target="_blank"} about the relationship between conscientiousness and self-rated health. 
+* Today we will briefly review univariate regression and then will discuss how to summarize and visualize uncertainty in regression models using a variety of plotting methods. We will then touch on how to estimate regression coefficients using matrix algebra. Lastly, we will introduce the General Linear Model and demonstrate how GLM can be used to understand all of the statistical tests we have learned so far (*t*-tests, ANOVA, correlations, regressions) within one (beautiful!) unifying framework.  
 
-## Data and review
+* We're going to work with a dataset about the relationship between personality and health. Let's pretende we’ve collected data from 60 people (30 men and 30 women) on their self-reported conscientiousness (using the [Big Five Inventory](https://www.ocf.berkeley.edu/~johnlab/bfi.htm){target="_blank"}) and their self-rated physical health.
 
-* Load in the data
-
-```{r lab-3-2}
+```{r lab-3-2, echo=FALSE}
 health <- import("https://raw.githubusercontent.com/uopsych/psy612/master/labs/lab-3/data/consc_health.csv")
 ```
+
+*To quickly navigate to the desired section, click one of the following links:*
+
+1. [Visualizing uncertainty in regression](#uncertainty)
+1. [Regression with matrix algebra](#matrix)
+1. [The General Linear Model](#glm)
+
+***
+
+# Visualizing uncertainty in regression{#uncertainty}
+
+* Before we discuss how to visualize uncertainty in regression, let's quickly review how to estimate a regression model in R. 
+
 <br>
 
-* Recall how we wrote out our model
+* Conducting regressions in R is actually pretty simple. We use the `lm()` function which is part of the pre-loaded {stats} library. There are basically two ingredients we pass to the `lm()` function
+
+1. **The formula:** Specify your regression formula in the general form `y ~ x`.
+
+2. **The data:** the dataframe that contains the variables in the formula. This is technically optional.
+
+<br>
+
+* Recall how we wrote out our model, specifying self-rated health as a function of conscientiousness
 
 $$Y_i = b_0 + b_1X_i + e_i$$
 
-$$health_i = b_0 + b_1consc_i + e_i$$
+$$sr\_health_i = b_0 + b_1consc_i + e_i$$
 <br>
 
-* Here's how we specified the model in R
+* Fill in the blanks below to specify the model
 
-####  {.tabset .tabset-fade .tabset-pills}
+<!---LEARNR EX 1-->
 
-##### Code
+<iframe style="margin:0 auto; min-width: 100%;" id="lab-3-glm-ex1" class="interactive" src="https://brendancullen.shinyapps.io/lab-3-glm-ex1/" scrolling="no" frameborder="no"></iframe>
 
-```{r eval=FALSE, lab-3-3}
+<!------------->
+
+```{r echo=FALSE, results='hide'}
 model <- lm(sr_health ~ consc, data = health)
 summary(model)
 ```
 
-##### Output
-
-```{r echo=FALSE, ref.label='lab-3-3'}
-```
-
-####
-<br>
 
 * Here are our coefficients...
 
@@ -104,7 +106,7 @@ tidy(model) %>% #
 
 * Recall the formula for calculating confidence intervals:
 
-$$CI_b = b \pm CV(SE_b)$$
+$$CI_b = b \pm critical\_value * SE_b$$
 
 * In [Minihack 2](#minihack2) you will get some practice using this formula to calculate confidence intervals around regression coefficients. For now, we will use a much easier method: `stats::confint()`. This function takes in a fitted model object as the first argument. By default it will give you 95% CI's. 
 
@@ -149,27 +151,18 @@ model %>% # start with our model object
 ####
 <br>
 
-* If we were to string all of this information together, it would generate a confidence **band** around our regression line. As we've seen already with previous examples, it's really easy to get this confidence band when creating a scatter plot by adding `geom_smooth(method = "lm")`. 
+* If we were to string all of this information together, it would generate a confidence **band** around our regression line. It's really easy to get this confidence band when creating a scatter plot by adding `geom_smooth(method = "lm")`. 
 
-####  {.tabset .tabset-fade .tabset-pills}
+<br> 
 
-##### Code
+* Fill in the blanks in the code below to generate a scatter plot with a regression line and 95% confidence band. 
 
-```{r lab-3-9, eval=FALSE}
-health %>%
-  ggplot(aes(x = consc, y = sr_health)) + 
-  geom_point(alpha = 0.3) + 
-  geom_smooth(method = "lm") + # adds a layer that includes the regression line & 95% confidence band
-  labs(x = "Conscientiousness", y = "Self-rated health") +
-  theme_minimal()
-```
+<!---LEARNR EX 2-->
 
-##### Output
+<iframe style="margin:0 auto; min-width: 100%;" id="lab-3-glm-ex2" class="interactive" src="https://brendancullen.shinyapps.io/lab-3-glm-ex2/" scrolling="no" frameborder="no"></iframe>
 
-```{r lab-3-10, echo=FALSE, ref.label='lab-3-9'}
-```
+<!------------->
 
-####
 <br>
 
 * The animation below is an example of a ["Hypothetical Outcomes Plot"](https://github.com/wilkelab/ungeviz){target="_blank"} (HOP) that visually demonstrates what this 95% CI band represents. In essence, this plot shows what the regression line could look like if we were to repeat our experiment over and over (sampling from the same population each time). 
@@ -273,15 +266,15 @@ predicted
 ####
 <br>
 
-* Next we'll bind these predicted values (and their prediction intervals) to our original dataset. 
+* Next we'll bind these predicted values (and their prediction intervals) to our original dataset, so we can create a plot from a single data frame.
 
 ####  {.tabset .tabset-fade .tabset-pills}
 
 ##### Code
 
 ```{r lab-3-17, eval=FALSE}
-new_df <- cbind(health, predicted)
-new_df
+pred_plot_data <- cbind(health, predicted)
+pred_plot_data
 ```
 
 ##### Output
@@ -292,30 +285,15 @@ new_df
 ####
 <br>
 
-
 * And finally, we'll plot a prediction band on top of the data by adding a `geom_ribbon()`. This prediction band gives us, for every value of `X`, the interval that represents the range of values that is likely to contain the value of a single new individual observation. Unlike confidence intervals, prediction intervals predict the spread for individual observations rather than the mean.
 
-####  {.tabset .tabset-fade .tabset-pills}
+* Fill in the blanks in the code to create a plot of the prediction band for our model. Pay special attention to `lwr` and `upr` within `pred_plot_data` above. How will you incorporate thise variables into the plot? 
 
-##### Code
+<!---LEARNR EX 3-->
 
-```{r lab-3-19, eval=FALSE}
-new_df %>% 
-  ggplot(aes(x = consc, y = sr_health)) +
-  geom_point() +
-  geom_smooth(method=lm,se=TRUE) +
-  geom_ribbon(aes(ymin = lwr, ymax = upr), fill = "blue", alpha = 0.1) + # prediction band
-  labs(x = "Conscientiousness", y = "Self-rated health") +
-  theme_minimal()
-```
+<iframe style="margin:0 auto; min-width: 100%;" id="lab-3-glm-ex3" class="interactive" src="https://brendancullen.shinyapps.io/lab-3-glm-ex3/" scrolling="no" frameborder="no"></iframe>
 
-##### Output
-
-```{r lab-3-20, echo=FALSE, ref.label='lab-3-19'}
-```
-
-####
-<br>
+<!------------->
 
 >**Question:** Why is the prediction band wider than the confidence band around our regression line?
 
@@ -323,6 +301,8 @@ new_df %>%
 ### Out-of-sample prediction
 
 * Remember, we can plug *any* `X` value (i.e. conscientiousness score) into our regression equation and predict the corresponding `Y` value (i.e. self-rated health score). And when I say *any* `X` value, I mean that it doesn't have to be an actual observation from our sample. We can also predict out-of-sample! 
+
+<br>
 
 * To illustrate this, we'll use a data frame that has new `X` values (conscientiousness scores). Let's pretend that we collected this data from a completely new sample of people.
 
@@ -348,21 +328,16 @@ consc_data_new
 
 * Now we can predict `Y` values for these out-of-sample `X` values based on the coefficients from our regression model. We just have to tell the `predict()` function what our `newdata` is. 
 
-####  {.tabset .tabset-fade .tabset-pills}
 
-##### Code
+* Fill in the blanks in the code below to make predictions about self-rated health values based on brand new, never-before seen conscientiousness scores. 
 
-```{r lab-3-23, eval=FALSE}
-predict(model, newdata = consc_data_new)
-```
+<!---LEARNR EX 4-->
 
-##### Output
+<iframe style="margin:0 auto; min-width: 100%;" id="lab-3-glm-ex4" class="interactive" src="https://brendancullen.shinyapps.io/lab-3-glm-ex4/" scrolling="no" frameborder="no"></iframe>
 
-```{r lab-3-24, echo=FALSE, ref.label='lab-3-23'}
-```
+<!------------->
 
-####
-<br>
+<br> 
 
 ## Other visualization tools
 
@@ -481,49 +456,24 @@ print(y_mat)
 ####
 <br>
 
-* Apply the matrix algebra formula to solve for the **`B`** matrix
+* Recall the matrix algebra formula to solve for the **`B`** matrix
 
 $$\mathbf{B} = (\mathbf{X'X})^{-1} \mathbf{X'Y}$$
 
-####  {.tabset .tabset-fade .tabset-pills}
 
-##### Code
+* Fill in the blanks in the code below to solve for the model coefficients. Check out the hint if you can't think of which functions to use! And see [here](https://uopsych.github.io/psy611/labs/lab-3.html){target="_blank"} for a refresher on matrix algebra. 
 
-```{r lab-3-33, eval=FALSE}
-solve(t(x_mat) %*% x_mat) %*% (t(x_mat) %*% y_mat)
-```
+<!---LEARNR EX 5-->
 
-##### Output
+<iframe style="margin:0 auto; min-width: 100%;" id="lab-3-glm-ex5" class="interactive" src="https://brendancullen.shinyapps.io/lab-3-glm-ex5/" scrolling="no" frameborder="no"></iframe>
 
-```{r lab-3-34, echo=FALSE, ref.label='lab-3-33'}
-```
+<!------------->
 
-####
 <br>
-
-* The `b`'s we just solved for using matrix algebra match the coefficients we get from `lm()`! 
-
-####  {.tabset .tabset-fade .tabset-pills}
-
-##### Code
-
-```{r lab-3-35, eval=FALSE}
-model$coefficients
-```
-
-##### Output
-
-```{r lab-3-36, echo=FALSE, ref.label='lab-3-35'}
-```
-
-####
-<br>
-
-***
 
 # The General Linear Model{#glm}
 
-* We just saw that regression works "under the hood" by solving a matrix algebra equation to get the intercept and slope of the regression line. As Sara mentioned in class, this matrix algebra equation works for *any* type of data we have. This should clue us into the idea that there is some fundamental process going on behind the scenes of all of our models...
+* We just saw that regression works "under the hood" by solving a matrix algebra equation to get the intercept and slope of the regression line. This matrix algebra equation works for *any* type of data we have. This should clue us into the idea that there is some fundamental process going on behind the scenes of all of our models...
 
 * The **general linear model (GLM)** is a family of models that assume the relationship between your DV and IV(s) is linear and additive, and that your outcome is normally distributed. In its simplest form, we can think of the general linear model as: 
 
@@ -531,7 +481,7 @@ $$Data = Model + Error $$
 
 * This provides a unifying framework for all of the statistical tests we have learned (or at least touched on) so far: *t*-tests, correlations, ANOVA, and linear regression. All of these tests are really doing the same math at the end of the day.
 
-* To illustrate this, we'll turn back to an [example from 611](https://uopsych.github.io/psy611/labs/lab-8.html#the_data){target=_"blank"}. The data are from Fox and Guyer’s (1978) anonymity and cooperation study. The data are included in the `{carData}` package, and you can see information about the data set using `?Guyer`. Twenty groups of four participants each played 30 trials of the the prisoner’s dilemma game. The number of cooperative choices (`cooperation`) made by each group were scored out of 120 (i.e., cooperative choices made by 4 participants over 30 trials). The groups either made decisions publicly or privately (`condition`).
+* To illustrate this, we'll turn back to an [example from PSY611](https://uopsych.github.io/psy611/labs/lab-8.html#the_data){target=_"blank"}. The data are from Fox and Guyer’s (1978) anonymity and cooperation study. The data are included in the `{carData}` package, and you can see information about the data set using `?Guyer`. Twenty groups of four participants each played 30 trials of the the prisoner’s dilemma game. The number of cooperative choices (`cooperation`) made by each group were scored out of 120 (i.e., cooperative choices made by 4 participants over 30 trials). The groups either made decisions publicly or privately (`condition`).
 
 * You can load in the data with the following code:
 
@@ -599,92 +549,60 @@ guyer
 
 ## *t*-test
 
-####  {.tabset .tabset-fade .tabset-pills}
+* Fill in the blanks in the code below to run an independent samples t-test testing the difference in mean number of cooperative choices made in the `public` and `anonymous` conditions. Assume the homogeneity of variance assumption has been met. 
 
-##### Code
+<!---LEARNR EX 6-->
 
-```{r lab-3-44, eval=FALSE}
-t_test <- t.test(formula = cooperation ~ condition, data = guyer, var.equal = TRUE)
-t_test
-```
+<iframe style="margin:0 auto; min-width: 100%;" id="lab-3-glm-ex6" class="interactive" src="https://brendancullen.shinyapps.io/lab-3-glm-ex6/" scrolling="no" frameborder="no"></iframe>
 
-##### Output
+<!------------->
 
-```{r lab-3-45, echo=FALSE, ref.label='lab-3-44'}
-```
-
-####
-<br>
 
 >**Question:** What is the 95% CI around? 
 
 
 ## Correlation 
 
-####  {.tabset .tabset-fade .tabset-pills}
+* Fill in the blanks in the code below to run a correlation test between `cooperation` and `condition`.
 
-##### Code
+<!---LEARNR EX 7-->
 
-```{r lab-3-46, eval=FALSE}
-cor_test <- cor.test(formula = ~ cooperation + condition, data = guyer) # note the one-sided formula
-cor_test
-```
+<iframe style="margin:0 auto; min-width: 100%;" id="lab-3-glm-ex7" class="interactive" src="https://brendancullen.shinyapps.io/lab-3-glm-ex7/" scrolling="no" frameborder="no"></iframe>
 
-##### Output
+<!------------->
 
-```{r lab-3-47, echo=FALSE, ref.label='lab-3-46'}
-```
-
-####
-<br>
 
 >**Question:** What is the 95% CI around this time? 
 
 
 ## ANOVA
 
-####  {.tabset .tabset-fade .tabset-pills}
+* Fill in the blanks in the code below to run an ANOVA testing the difference in mean number of cooperative choices made in the `public` and `anonymous` conditions.
 
-##### Code
+<!---LEARNR EX 8-->
 
-```{r lab-3-48, eval=FALSE}
-anova_test <- aov(formula = cooperation ~ condition, data = guyer)
-summary(anova_test)
-```
+<iframe style="margin:0 auto; min-width: 100%;" id="lab-3-glm-ex8" class="interactive" src="https://brendancullen.shinyapps.io/lab-3-glm-ex8/" scrolling="no" frameborder="no"></iframe>
 
-##### Output
-
-```{r lab-3-49, echo=FALSE, ref.label='lab-3-48'}
-```
-
-####
-<br>
+<!------------->
 
 >**Question:** What is the relationship between the *F* statistic from this ANOVA and the *t* statistic from our previous two tests?
 
 
 ## Regression
 
-####  {.tabset .tabset-fade .tabset-pills}
+* Fill in the blanks in the code below to run a linear regression model where `cooperation` varies as a function of `condition`.
 
-##### Code
+<!---LEARNR EX 9-->
 
-```{r lab-3-50, eval=FALSE}
-regression <- lm(formula = cooperation ~ condition, data = guyer)
-summary(regression)
-```
+<iframe style="margin:0 auto; min-width: 100%;" id="lab-3-glm-ex9" class="interactive" src="https://brendancullen.shinyapps.io/lab-3-glm-ex9/" scrolling="no" frameborder="no"></iframe>
 
-##### Output
-
-```{r lab-3-51, echo=FALSE, ref.label='lab-3-50'}
-```
-
-####
-<br>
+<!------------->
 
 >**Question:** What does the intercept represent? The slope? 
 
-***
+* Note: The *p* values from all 4 models you just ran are exactly the same! Why? Because all 4 tests are all based on the same underlying general linear model!
+
+<br>
 
 # Minihacks
 
@@ -696,79 +614,62 @@ summary(regression)
 
 1. Create the Matrix $\mathbf{X}$ & Vector $\mathbf{Y}$
 
-```{r lab-3-53}
-# your code here
-```
+<!---LEARNR EX 12-->
 
-2. Produce $\mathbf{X'}$ (also called $\mathbf{X^T}$ or the transpose of $\mathbf{X}$)
+<iframe style="margin:0 auto; min-width: 100%;" id="lab-3-glm-ex12" class="interactive" src="https://brendancullen.shinyapps.io/lab-3-glm-ex12/" scrolling="no" frameborder="no"></iframe>
 
-```{r lab-3-54}
-# your code here
-```
+<!------------->
 
-3. Produce $\mathbf{X'X}^{-1}$ (inverse of $\mathbf{X'X}$)
+2. Solve for the model coefficients using $\mathbf{B = (X'X)}^{-1}\mathbf{X'Y}$
 
-```{r lab-3-55}
-# your code here
-```
+<!---LEARNR EX 13-->
 
-4. Produce $\mathbf{X'Y}$
+<iframe style="margin:0 auto; min-width: 100%;" id="lab-3-glm-ex13" class="interactive" src="https://brendancullen.shinyapps.io/lab-3-glm-ex13/" scrolling="no" frameborder="no"></iframe>
 
-```{r lab-3-56}
-# your code here
-```
+<!------------->
 
-5. Produce $\mathbf{B = (X'X)}^{-1}\mathbf{X'Y}$
+3. Confirm your results using the `lm()` function in R.
 
-```{r lab-3-57}
-# your code here
-```
+<!---LEARNR EX 14-->
 
-6. Confirm your results using the `lm()` function in R.
+<iframe style="margin:0 auto; min-width: 100%;" id="lab-3-glm-ex14" class="interactive" src="https://brendancullen.shinyapps.io/lab-3-glm-ex14/" scrolling="no" frameborder="no"></iframe>
 
-```{r lab-3-58}
-# your code here
-```
+<!------------->
 
 ***
 
 ## Minihack 2: Confidence intervals{#minihack2}
 
-* For this minihack, we will refer back to the example about conscientiousness and health. We used `confint()` to calculate the 95% CI for our regression coefficients. Your job is start with the model output, stored as a list object (see below), and extract the relevant pieces of information to calculate the 95% CI around the intercept and slope. 
+* For this minihack, we will refer back to the example about conscientiousness and health. We used `confint()` to calculate the 95% CI for our regression coefficients. Your job is start with the model output, stored as a list object, and extract the relevant pieces of information to calculate the 95% CI around the intercept and slope. 
 
-```{r lab-3-59, eval=FALSE}
+
+1. Calculate confidence intervals "by hand". (Hint: Use `qt()` to draw from a *t* distribution)
+
+* Here's the model output again for reference. 
+
+```{r}
 model <- lm(sr_health ~ consc, data = health)
+model_summary <- summary(model)
+model_summary
 ```
 
-1. Calculate confidence intervals "by hand". 
 
-```{r lab-3-60}
-# your code here
-```
+<!---LEARNR EX 10-->
+
+<iframe style="margin:0 auto; min-width: 100%;" id="lab-3-glm-ex10" class="interactive" src="https://brendancullen.shinyapps.io/lab-3-glm-ex10/" scrolling="no" frameborder="no"></iframe>
+
+<!------------->
+
 
 2. Verify that your answer corresponds to the result from `confint()`. 
 
-```{r lab-3-61}
-# your code here
-```
+<!---LEARNR EX 11-->
 
-3. Create a scatter plot representing the relationship between conscientiousness and self-rated health with a regression line and 95% confidence band. 
+<iframe style="margin:0 auto; min-width: 100%;" id="lab-3-glm-ex11" class="interactive" src="https://brendancullen.shinyapps.io/lab-3-glm-ex11/" scrolling="no" frameborder="no"></iframe>
 
-```{r lab-3-62}
-# your code here
-```
-
-3a. Add a line whose intercept is the lower bound of the 95% CI for the model intercept and whose slope is the upper bound of the 95% CI for the model slope. Hint: see `?geom_abline()`
-
-```{r lab-3-63}
-# your code here
-```
+<!------------->
 
 
-3b. Now add another line whose intercept is the upper bound of the 95% CI for the model intercept and whose slope is the lower bound of the 95% CI for the model slope. 
-
-```{r lab-3-64}
-# your code here
-```
-
-3d. What does this show you about the relationship between the 95% CI's around the model coefficients and the 95% CI band around the regression line? 
+<script>
+  iFrameResize({}, ".interactive");
+</script>
