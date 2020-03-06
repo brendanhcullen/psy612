@@ -1,5 +1,5 @@
 ---
-title: "Lab 3: Univariate Regression (II) & GLM"
+title: "Simple Regression & The General Linear Model"
 output: 
   html_document:
     include:
@@ -473,7 +473,7 @@ $$\mathbf{B} = (\mathbf{X'X})^{-1} \mathbf{X'Y}$$
 
 # The General Linear Model{#glm}
 
-* We just saw that regression works "under the hood" by solving a matrix algebra equation to get the intercept and slope of the regression line. As Sara mentioned in class, this matrix algebra equation works for *any* type of data we have. This should clue us into the idea that there is some fundamental process going on behind the scenes of all of our models...
+* We just saw that regression works "under the hood" by solving a matrix algebra equation to get the intercept and slope of the regression line. This matrix algebra equation works for *any* type of data we have. This should clue us into the idea that there is some fundamental process going on behind the scenes of all of our models...
 
 * The **general linear model (GLM)** is a family of models that assume the relationship between your DV and IV(s) is linear and additive, and that your outcome is normally distributed. In its simplest form, we can think of the general linear model as: 
 
