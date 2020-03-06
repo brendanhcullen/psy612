@@ -295,6 +295,48 @@ pred_plot_data
 
 <!------------->
 
+>**Question:** Why is the prediction band wider than the confidence band around our regression line?
+
+
+### Out-of-sample prediction
+
+* Remember, we can plug *any* `X` value (i.e. conscientiousness score) into our regression equation and predict the corresponding `Y` value (i.e. self-rated health score). And when I say *any* `X` value, I mean that it doesn't have to be an actual observation from our sample. We can also predict out-of-sample! 
+
+<br>
+
+* To illustrate this, we'll use a data frame that has new `X` values (conscientiousness scores). Let's pretend that we collected this data from a completely new sample of people.
+
+####  {.tabset .tabset-fade .tabset-pills}
+
+##### Code
+
+```{r lab-3-21, eval=FALSE}
+# read in new data
+consc_data_new <- import("https://raw.githubusercontent.com/uopsych/psy612/master/labs/lab-3/data/consc_new.csv")
+
+# let's view it
+consc_data_new
+```
+
+##### Output
+
+```{r lab-3-22, echo=FALSE, ref.label='lab-3-21'}
+```
+
+####
+<br>
+
+* Now we can predict `Y` values for these out-of-sample `X` values based on the coefficients from our regression model. We just have to tell the `predict()` function what our `newdata` is. 
+
+
+* Fill in the blanks in the code below to make predictions about self-rated health values based on brand new, never-before seen conscientiousness scores. 
+
+<!---LEARNR EX 4-->
+
+<iframe style="margin:0 auto; min-width: 100%;" id="lab-3-glm-ex4" class="interactive" src="https://brendancullen.shinyapps.io/lab-3-glm-ex4/" scrolling="no" frameborder="no"></iframe>
+
+<!------------->
+
 
 
 
