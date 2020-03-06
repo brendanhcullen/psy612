@@ -614,39 +614,23 @@ guyer
 
 1. Create the Matrix $\mathbf{X}$ & Vector $\mathbf{Y}$
 
-```{r lab-3-53}
-# your code here
-```
+<!---LEARNR EX 12-->
 
-2. Produce $\mathbf{X'}$ (also called $\mathbf{X^T}$ or the transpose of $\mathbf{X}$)
+<iframe style="margin:0 auto; min-width: 100%;" id="lab-3-glm-ex12" class="interactive" src="https://brendancullen.shinyapps.io/lab-3-glm-ex12/" scrolling="no" frameborder="no"></iframe>
 
-```{r lab-3-54}
-# your code here
-```
+<!------------->
 
-3. Produce $\mathbf{X'X}^{-1}$ (inverse of $\mathbf{X'X}$)
+2. Solve for the model coefficients using $\mathbf{B = (X'X)}^{-1}\mathbf{X'Y}$
 
-```{r lab-3-55}
-# your code here
-```
+<!---LEARNR EX 13-->
 
-4. Produce $\mathbf{X'Y}$
+<iframe style="margin:0 auto; min-width: 100%;" id="lab-3-glm-ex13" class="interactive" src="https://brendancullen.shinyapps.io/lab-3-glm-ex13/" scrolling="no" frameborder="no"></iframe>
 
-```{r lab-3-56}
-# your code here
-```
+<!------------->
 
-5. Produce $\mathbf{B = (X'X)}^{-1}\mathbf{X'Y}$
+3. Confirm your results using the `lm()` function in R.
 
-```{r lab-3-57}
-# your code here
-```
 
-6. Confirm your results using the `lm()` function in R.
-
-```{r lab-3-58}
-# your code here
-```
 
 ***
 
