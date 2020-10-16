@@ -600,7 +600,7 @@ str(guyer)
 
 <br>
 
--   Covert the `condition` variable to `0's` and `1's`. We will talk more about dummy coding in a future lab.
+-   Convert the `condition` variable to `0's` and `1's`. We will talk more about dummy coding in a future lab.
 
 ####  {.tabset .tabset-fade .tabset-pills}
 
